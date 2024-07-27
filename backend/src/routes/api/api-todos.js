@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { retrieveTodos, createTodo, updateCompleteStatus } from "../../data/todos-dao.js";
+import { retrieveTodos, createTodo, updateCompleteStatus, deleteTodo } from "../../data/todos-dao.js";
 
 const router = Router();
 
@@ -24,6 +24,12 @@ router.patch("/:id", async (req, res) => {
     }
     const success = updateCompleteStatus(id, isComplete);
     res.sendStatus(success ? 204 : 404 );
+})
+
+router.delete("/:id", async (req, res) => {
+    const id = req.params.id;
+    deleteTodo(id);
+    return res.sendStatus(204);
 })
 
 export default router;
