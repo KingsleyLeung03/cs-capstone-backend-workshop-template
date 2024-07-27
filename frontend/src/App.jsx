@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TodoList from "./components/TodoList";
 import styles from "./App.module.css";
 import AddTodoForm from "./components/AddTodoForm";
@@ -16,6 +16,12 @@ export default function App() {
 
   // The search string to use to filter the displayed todos.
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/todos")
+    .then((response) => response.json())
+    .then((todos) => setTodos(todos));
+  }, []);
 
   /**
    * Creates a new todo.
