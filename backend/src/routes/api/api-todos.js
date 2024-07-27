@@ -9,6 +9,9 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
     const { description, dueDate } = req.body;
+    if (!description || !dueDate) {
+        return res.sendStatus(422);
+    }
     const todo = await createTodo(description, dueDate);
     return res.location(`/api/todos/${todo.id}`).status(201).json(todo);
 });
@@ -16,8 +19,11 @@ router.post("/", async (req, res) => {
 router.patch("/:id", async (req, res) => {
     const id = req.params.id;
     const { isComplete } = req.body;
-    updateCompleteStatus(id, isComplete);
-    res.sendStatus(204);
+    if (!isComplete) {
+        return res.sendStatus(422);
+    }
+    const success = updateCompleteStatus(id, isComplete);
+    res.sendStatus(success ? 204 : 404 );
 })
 
 export default router;
